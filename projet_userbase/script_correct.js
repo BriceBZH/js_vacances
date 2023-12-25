@@ -161,124 +161,152 @@ let users = [
     }
 ];
 
-//etape 1
 
-function countActiveUsers(users) {
-    let nbActiveUsers = 0;
-    for(let i=0; i< users.length; i++) {
-        if(users[i].isActive) {
-            nbActiveUsers++;
-        }
+function countActiveUsers(users)
+{
+		let count = 0;
+		for(let user of users)
+		{
+    		if(user.isActive === true)
+        count++;
     }
-    return nbActiveUsers;
+    
+    return count;
 }
 
-console.log("We currently have "+countActiveUsers(users)+" active users.");
-
-//etape 2
+console.log(`ETAPE 1 : We currently have ${ countActiveUsers(users) } active users.`);
 
 function getActiveUsers(users) {
-    let activeUsers = [];
-    for(let i=0; i< users.length; i++) {
-        if(users[i].isActive) {
-            activeUsers.push(users[i]);
-        }
+	let activeUsers = [];
+  
+  for(let user of users)
+		{
+    		if(user.isActive === true)
+        activeUsers.push(user);
     }
-    return activeUsers;
+  
+  	return activeUsers;
 }
 
 let activeUsers = getActiveUsers(users);
 
-function hasBlueEyes(activeUsers) {
-    let nbBlueEyes = 0;
-    for(let i=0; i< activeUsers.length; i++) {
-        if(activeUsers[i].eyeColor === "blue") {
-            nbBlueEyes++;
+function getUsersByEyeColor(users, color)
+{
+	let list = [];
+  
+  for(let user of users)
+    {
+    		if(user.eyeColor === color)
+        {
+        	list.push(user);
         }
     }
-    return nbBlueEyes;
+    
+    return list;
 }
 
-console.log(`Out of our currently ${countActiveUsers(users)} active users, ${hasBlueEyes(activeUsers)} have blue eyes.`);
+console.log(`ETAPE 2 : Out of our currently ${activeUsers.length} active users, ${getUsersByEyeColor(activeUsers, "blue").length} have blue eyes.`);
 
-//etape 3
 
-function computeActiveUsersAverageAge(activeUsers) {
-    let sumAge = 0;
-    for(let i=0; i< activeUsers.length; i++) {
-        sumAge += Number(activeUsers[i].age);
+function getActiveUsersAges(users) {
+	let ages = [];
+  
+  for (let user of users)
+  {
+  	ages.push(user.age);
+  }
+  
+  return ages;
+}
+
+let activeUsersAges = getActiveUsersAges(activeUsers);
+
+function computeAverage(values)
+{
+    let average = 0;
+    let sum = 0;
+
+    for(let value of values)
+    {
+        sum = sum + value;
     }
-    let averageAge = sumAge / activeUsers.length;
-    return averageAge;
-}
-console.log(`Out of our currently ${countActiveUsers(users)} active users, the average age is ${computeActiveUsersAverageAge(activeUsers)}.`);
 
-//etape 4
+    average = sum / values.length;
+
+    return average;
+}
+
+console.log(`ÉTAPE 3 : Out of our currently ${activeUsers.length} active users, the average age is ${computeAverage(activeUsersAges)}.`);
+
 
 function getMultronUsers(users) {
-    let multronUsers = [];
-    for(let i=0; i< users.length; i++) {
-        if(users[i].company === "MULTRON") {
-            multronUsers.push(users[i]);
-        }
+		let multronUsers = [];
+    
+    for(let user of users)
+    {
+    	if (user.company === "MULTRON")
+      {
+      	multronUsers.push(user);
+      }
     }
+    
     return multronUsers;
 }
 
-let nbMultronusers = getMultronUsers(users);
+let multronUsers = getMultronUsers(users);
 
-function setMultronToCenturia(users, newCompany) {
-    for(let i=0; i< users.length; i++) {
-        if(users[i].company === "MULTRON") {
-            users[i].company = newCompany;
-        }
+function setMultronToCenturia(users) {
+	for (let user of users)
+  {
+  	if(user.company === "MULTRON")
+    {
+    		user.company = "CENTURIA";
     }
+  }
 }
 
-setMultronToCenturia(users, "CENTURIA");
+setMultronToCenturia(multronUsers);
 
-console.log(`${nbMultronusers.length} user companies have been changed from MULTRON to CENTURIA.`);
+console.log(`ÉTAPE 4 : ${multronUsers.length} user companies have been changed from MULTRON to CENTURIA.`);
 
-//etape 5
 
-function getBrownEyedUsers(users) {
-    let brownEyes = [];
-    for(let i=0; i< users.length; i++) {
-        if(users[i].eyeColor === "brown") {
-            brownEyes.push(users[i]);
-        }
+function excludeCenturiaWorkers(users) {
+		let list = [];
+  
+  	for(let user of users)
+    {
+    		if(user.company !== "CENTURIA")
+      	{
+      		list.push(user);
+      	}
     }
-    return brownEyes;
+    
+    return list;
 }
 
-let brownEyes = getBrownEyedUsers(users);
+let brownEyeUsers = getUsersByEyeColor(users, "brown");
+setMultronToCenturia(brownEyeUsers);
 
-function excludeCenturiaWorkers(brownEyes) {
-    let nbExcludeCenturia = 0
-    for(let i=0; i< brownEyes.length; i++) {
-        if(brownEyes[i].company !== "CENTURIA") {
-            nbExcludeCenturia++;
-        }
+console.log(`ÉTAPE 5 : ${excludeCenturiaWorkers(brownEyeUsers).length} users with brown eyes do not work at CENTURIA`);
+
+function countUsersByStatusAndEyeColor(users, status, color)
+{
+	let list = [];
+  
+  for(let user of users)
+  {
+  	if(user.isActive === status && user.eyeColor === color)
+    {
+    		list.push(user);
     }
-    return nbExcludeCenturia;
+  }
+  
+  return list.length;
 }
 
-console.log(`${excludeCenturiaWorkers(brownEyes)} users with brown eyes do not work at CENTURIA`);
+console.log("ETAPE 6 :");
+console.log(`Out of our brown eyed users ${countUsersByStatusAndEyeColor(users, true, "brown")} are active and ${countUsersByStatusAndEyeColor(users, false, "brown")} are inactive`);
 
-//etape 6
+console.log(`Out of our green eyed users ${countUsersByStatusAndEyeColor(users, true, "green")} are active and ${countUsersByStatusAndEyeColor(users, false, "green")} are inactive`);
 
-function getUsersByStatusAndEyesColor(users, userStatus, color) {
-    let nbUsers = 0;
-    for(let i=0; i< users.length; i++) {
-        if(users[i].eyeColor === color && users[i].isActive === userStatus) {
-            nbUsers++;
-        }
-    }
-    return nbUsers;
-}
-
-console.log(`Out of our brown eyed users ${getUsersByStatusAndEyesColor(users, true, "brown")} are active and ${getUsersByStatusAndEyesColor(users, false, "brown")} are inactive`);
-
-console.log(`Out of our green eyed users ${getUsersByStatusAndEyesColor(users, true, "green")} are active and ${getUsersByStatusAndEyesColor(users, false, "green")} are inactive`);
-
-console.log(`Out of our blue eyed users ${getUsersByStatusAndEyesColor(users, true, "blue")} are active and ${getUsersByStatusAndEyesColor(users, false, "blue")} are inactive`);
+console.log(`Out of our blue eyed users ${countUsersByStatusAndEyeColor(users, true, "blue")} are active and ${countUsersByStatusAndEyeColor(users, false, "blue")} are inactive`);
